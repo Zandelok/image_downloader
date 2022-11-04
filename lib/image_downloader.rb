@@ -7,7 +7,7 @@ require 'faraday'
 class ImageDownloader < Application
   attr_reader :data
 
-  MAX_SIZE = 10485760
+  MAX_SIZE = 10_485_760
 
   def initialize(data)
     @data = data
@@ -22,16 +22,16 @@ class ImageDownloader < Application
   def download_images(image_urls)
     threads = []
     image_urls.each do |image|
-        threads << Thread.new { http_download(image) }
+      threads << Thread.new { http_download(image) }
     end
     threads.each(&:join)
   end
 
   def http_download(link)
-    if remote_file_exists?(link) && valid_size?(link)
-      File.open("public/images/#{link.split('/').last}", 'w+') do |file|
-        file.write(URI.open(link).read)
-      end
+    return unless remote_file_exists?(link) && valid_size?(link)
+
+    File.open("public/images/#{link.split('/').last}", 'w+') do |file|
+      file.write(URI.open(link).read)
     end
   end
 
