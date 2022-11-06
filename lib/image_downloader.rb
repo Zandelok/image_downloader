@@ -2,7 +2,7 @@
 
 require_relative 'application'
 require 'open-uri'
-require 'faraday'
+require 'mechanize'
 
 class ImageDownloader < Application
   attr_reader :data
@@ -20,26 +20,29 @@ class ImageDownloader < Application
   private
 
   def download_images(image_urls)
+    request = Mechanize.new
+    request.redirection_limit = 1
     threads = []
+
     image_urls.each do |image|
-      threads << Thread.new { http_download(image) }
+      threads << Thread.new { http_download(image, request) }
     end
     threads.each(&:join)
   end
 
-  def http_download(link)
-    return unless remote_file_exists?(link) && valid_size?(link)
+  def http_download(link, request)
+    return unless remote_file_exists?(link, request) && valid_size?(link, request)
 
     File.open("public/images/#{link.split('/').last}", 'w+') do |file|
       file.write(URI.open(link).read)
     end
   end
 
-  def remote_file_exists?(url)
-    Faraday.get(url).headers['content-type'].start_with?('image')
+  def remote_file_exists?(url, request)
+    request.get(url).response['content-type'].start_with?('image')
   end
 
-  def valid_size?(url)
-    Faraday.get(url).headers['content-length'].to_i < MAX_SIZE
+  def valid_size?(url, request)
+    request.get(url).response['content-length'].to_i < MAX_SIZE
   end
 end

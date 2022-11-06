@@ -2,6 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'faraday'
+gem 'mechanize'
 gem 'open3'
 gem 'rspec'
