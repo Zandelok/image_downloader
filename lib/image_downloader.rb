@@ -20,7 +20,8 @@ class ImageDownloader < Application
     threads = []
 
     image_urls.each do |image|
-      image_name = set_filename(image)
+      file_name = image.split('/').last
+      image_name = set_filename(file_name)
       threads << Thread.new { http_download(image, image_name) }
     end
 
@@ -34,9 +35,9 @@ class ImageDownloader < Application
     end
   end
 
-  def set_filename(image)
-    image_name = image.split('/').last
+  def set_filename(image_name)
     file_names = Dir.new('public/images/').children
     image_name = file_names.include?(image_name) ? image_name.split('.').join('_new.') : image_name
+    file_names.include?(image_name) ? set_filename(image_name) : image_name
   end
 end
