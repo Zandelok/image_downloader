@@ -28,6 +28,7 @@ class ImageDownloader < Application
       threads << Thread.new { http_download(image, request) }
     end
     threads.each(&:join)
+    p 'All allowed files were successfully downloaded'
   end
 
   def http_download(link, request)

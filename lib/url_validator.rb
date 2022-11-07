@@ -16,7 +16,13 @@ class UrlValidator < Application
   private
 
   def parser(file_name)
-    file_name.split.select { |link| valid_url?(link) }.uniq
+    valid_urls = file_name.split.select { |link| valid_url?(link) }.uniq
+    if valid_urls.empty?
+      warn 'No reliable addresses were found'
+      exit
+    end
+
+    valid_urls
   end
 
   def valid_url?(url)
