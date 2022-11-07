@@ -1,0 +1,1 @@
+http:// oops://oops http://test.com\n<script src=\"nasty.js\"> www.google.com:81
