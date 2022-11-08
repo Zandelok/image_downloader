@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'application'
+require 'benchmark'
 
 class ImageDownloader < Application
   attr_reader :image_urls, :path_for_downloads
@@ -17,25 +18,15 @@ class ImageDownloader < Application
   private
 
   def download_images
-    threads = []
-
-    image_urls.each do |image|
+    queue = Queue.new
+    threads = image_urls.map do |image|
       file_name = image.split('/').last
       image_name = filename(file_name)
-
-      multithreading(threads, image, image_name)
+      Thread.new { queue << http_download(image, image_name) }
     end
 
     threads.each(&:join)
     p 'All allowed files were successfully downloaded'
-  end
-
-  def multithreading(threads, image, image_name)
-    queue = Queue.new
-
-    threads << Thread.new do
-      queue << http_download(image, image_name)
-    end
   end
 
   def http_download(link, file_name)
