@@ -3,6 +3,7 @@
 require_relative '../../lib/image_downloader'
 
 describe ImageDownloader do
+  let(:path_for_downloads) { 'spec/fixtures/test_images/' }
   let(:url) { 'https://s3.eu-central-1.amazonaws.com/nftlaunchpad.com-media/competition/BAYC/1.png' }
 
   before do
@@ -15,7 +16,6 @@ describe ImageDownloader do
 
   describe '#call' do
     subject { described_class.call(data, path_for_downloads) }
-    let(:path_for_downloads) { 'spec/fixtures/test_images/' }
 
     context 'when valid urls exists' do
       let(:data) { [url] }
