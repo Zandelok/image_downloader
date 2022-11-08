@@ -6,7 +6,7 @@ require_relative '../lib/folder_validator'
 require_relative '../lib/reader'
 require_relative '../lib/url_validator'
 require_relative '../lib/image_downloader'
-require_relative '../lib/performance'
+require_relative '../lib/performer'
 
 if ARGV.size != 2
   warn 'Please, write file name and path for downloads'
@@ -14,4 +14,4 @@ if ARGV.size != 2
 end
 
 InternetConnectionValidator.call
-Performance.call(ARGV.first, ARGV[1], FolderValidator, Reader, UrlValidator, ImageDownloader)
+Performer.call(ARGV.first, ARGV[1], FolderValidator, Reader, UrlValidator, ImageDownloader)

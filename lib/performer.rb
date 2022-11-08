@@ -2,7 +2,7 @@
 
 require_relative 'application'
 
-class Performance < Application
+class Performer < Application
   attr_reader :file, :path, :folder_validator, :reader, :validator, :downloader
 
   def initialize(file, path, folder_validator, reader, validator, downloader)
