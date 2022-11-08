@@ -15,8 +15,7 @@ class InternetConnectionValidator < Application
     begin
       dns_resolver.getaddress('google.com')
     rescue Resolv::ResolvError
-      warn 'No Internet connection'
-      exit
+      exit_with_warning('No Internet connection')
     end
   end
 end

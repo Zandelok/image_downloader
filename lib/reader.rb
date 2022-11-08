@@ -12,17 +12,13 @@ class Reader < Application
   def call
     raise StandardError unless File.exist?(file_path)
 
-    empty?(File.read(file_path))
+    file ||= read_file
+    file.empty? ? exit_with_warning('This file is empty') : file
   end
 
   private
 
-  def empty?(file)
-    if file.empty?
-      warn 'This file is empty'
-      exit
-    else
-      file
-    end
+  def read_file
+    File.read(file_path)
   end
 end

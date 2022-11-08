@@ -14,4 +14,4 @@ if ARGV.size != 2
 end
 
 InternetConnectionValidator.call
-Performer.call(ARGV.first, ARGV[1], FolderValidator, Reader, UrlValidator, ImageDownloader)
+Performer.call(ARGV.first, ARGV.last, FolderValidator, Reader, UrlValidator, ImageDownloader)

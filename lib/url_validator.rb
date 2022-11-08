@@ -3,30 +3,27 @@
 require_relative 'application'
 
 class UrlValidator < Application
-  attr_reader :file
+  attr_reader :income_urls
 
   MAX_SIZE = 10_485_760
 
-  def initialize(file)
-    @file = file
+  def initialize(income_urls)
+    @income_urls = income_urls
   end
 
   def call
-    validate_urls(file)
+    validate_urls
   end
 
   private
 
-  def validate_urls(file_name)
+  def validate_urls
     request = Mechanize.new
     request.redirection_limit = 1
 
-    valid_urls = file_name.split.select { |link| valid_url?(link) }.uniq
+    valid_urls = income_urls.split.select { |link| valid_url?(link) }.uniq
     image_urls = valid_urls.select { |link| image_urls?(link, request) }
-    if image_urls.empty?
-      warn 'No reliable files were found'
-      exit
-    end
+    exit_with_warning('No reliable files were found') if image_urls.empty?
 
     image_urls
   end

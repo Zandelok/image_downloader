@@ -3,21 +3,21 @@
 require_relative 'application'
 
 class Performer < Application
-  attr_reader :file, :path, :folder_validator, :reader, :validator, :downloader
+  attr_reader :input_data_file, :folder_for_downloads_path, :folder_validator, :reader, :url_validator, :downloader
 
-  def initialize(file, path, folder_validator, reader, validator, downloader)
-    @file = file
-    @path = path
+  def initialize(input_data_file, folder_for_downloads_path, folder_validator, reader, url_validator, downloader)
+    @input_data_file = input_data_file
+    @folder_for_downloads_path = folder_for_downloads_path
     @folder_validator = folder_validator
     @reader = reader
-    @validator = validator
+    @url_validator = url_validator
     @downloader = downloader
   end
 
   def call
-    folder_path = folder_validator.call(path)
-    valid_file = reader.call(file)
-    valid_urls = validator.call(valid_file)
-    downloader.call(valid_urls, folder_path)
+    folder_validator.call(folder_for_downloads_path)
+    read_file = reader.call(input_data_file)
+    valid_urls = url_validator.call(read_file)
+    downloader.call(valid_urls, folder_for_downloads_path)
   end
 end

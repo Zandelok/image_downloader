@@ -10,17 +10,16 @@ class FolderValidator < Application
   end
 
   def call
-    folder_exists?(path) ? path : create_folder(path)
+    create_folder unless folder_exists?
   end
 
   private
 
-  def folder_exists?(path_for_downloads)
-    Dir.exist?(path_for_downloads)
+  def folder_exists?
+    Dir.exist?(path)
   end
 
-  def create_folder(path_for_downloads)
-    Dir.mkdir(path_for_downloads)
-    path_for_downloads
+  def create_folder
+    Dir.mkdir(path)
   end
 end

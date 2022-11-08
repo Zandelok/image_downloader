@@ -6,9 +6,9 @@ RSpec.describe 'script' do
   let(:stdoutput) { Open3.capture3("./bin/main #{file} #{path_for_downloads}") }
   let(:file) { 'spec/fixtures/test.txt' }
   let(:path_for_downloads) { 'spec/fixtures/test_images/' }
-  let(:result) { stdoutput[0] }
+  let(:result) { stdoutput[0].split("\n").last }
   let(:errors) { stdoutput[1] }
-  let(:expected_result) { "\"All allowed files were successfully downloaded\"\n" }
+  let(:expected_result) { '"All allowed files were successfully downloaded"' }
   let(:url) { 'https://s3.eu-central-1.amazonaws.com/nftlaunchpad.com-media/competition/BAYC/1.png' }
 
   before do
