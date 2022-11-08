@@ -5,12 +5,12 @@ require 'resolv'
 
 class InternetConnectionValidator < Application
   def call
-    has_internet?
+    internet?
   end
 
   private
 
-  def has_internet?
+  def internet?
     dns_resolver = Resolv::DNS.new
     begin
       dns_resolver.getaddress('google.com')

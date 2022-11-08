@@ -23,7 +23,7 @@ describe Performer do
     subject { described_class.call(file, folder_path, FolderValidator, Reader, UrlValidator, ImageDownloader) }
 
     context 'when success' do
-      it { expect(subject).to eq("All allowed files were successfully downloaded") }
+      it { expect(subject).to eq('All allowed files were successfully downloaded') }
     end
   end
 end

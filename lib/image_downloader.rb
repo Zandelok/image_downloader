@@ -38,17 +38,11 @@ class ImageDownloader < Application
       end
     end
 
-    threads << Thread.new do
-      num_threads.times do
-        queue.pop
-      end
-    end
+    threads << Thread.new { num_threads.times { queue.pop } }
   end
 
   def http_download(link, file_name, path_for_downloads)
-    File.open("#{path_for_downloads}#{file_name}", 'w+') do |file|
-      file.write(Mechanize.new.get_file(link))
-    end
+    File.write("#{path_for_downloads}#{file_name}", Mechanize.new.get_file(link))
   end
 
   def set_filename(image_name, path_for_downloads)

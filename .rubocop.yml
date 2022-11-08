@@ -1,0 +1,18 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Lint/EmptyBlock:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
