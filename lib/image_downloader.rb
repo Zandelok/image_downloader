@@ -1,43 +1,59 @@
 # frozen_string_literal: true
 
 require_relative 'application'
-require 'open-uri'
 
 class ImageDownloader < Application
-  attr_reader :data
+  attr_reader :data, :path
 
-  def initialize(data)
+  def initialize(data, path)
     @data = data
+    @path = path
   end
 
   def call
-    download_images(data)
+    download_images(data, path)
   end
 
   private
 
-  def download_images(image_urls)
+  def download_images(image_urls, path_for_downloads)
     threads = []
 
     image_urls.each do |image|
       file_name = image.split('/').last
-      image_name = set_filename(file_name)
-      threads << Thread.new { http_download(image, image_name) }
+      image_name = set_filename(file_name, path_for_downloads)
+      multithreading(threads, image, image_name, path_for_downloads)
     end
 
     threads.each(&:join)
     p 'All allowed files were successfully downloaded'
   end
 
-  def http_download(link, file_name)
-    File.open("public/images/#{file_name}", 'w+') do |file|
-      file.write(URI.open(link).read)
+  def multithreading(threads, image, image_name, path_for_downloads)
+    queue = Thread::Queue.new
+    num_threads = 5
+    Thread.new do
+      num_threads.times do
+        queue.push(http_download(image, image_name, path_for_downloads))
+      end
+    end
+
+    threads << Thread.new do
+      num_threads.times do
+        queue.pop
+      end
     end
   end
 
-  def set_filename(image_name)
-    file_names = Dir.new('public/images/').children
+  def http_download(link, file_name, path_for_downloads)
+    File.open("#{path_for_downloads}#{file_name}", 'w+') do |file|
+      file.write(Mechanize.new.get_file(link))
+    end
+  end
+
+  def set_filename(image_name, path_for_downloads)
+    file_names = Dir.new(path_for_downloads.to_s).children
     image_name = file_names.include?(image_name) ? image_name.split('.').join('_new.') : image_name
-    file_names.include?(image_name) ? set_filename(image_name) : image_name
+    file_names.include?(image_name) ? set_filename(image_name, path_for_downloads) : image_name
   end
 end

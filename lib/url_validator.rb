@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'application'
-require 'mechanize'
 
 class UrlValidator < Application
   attr_reader :file

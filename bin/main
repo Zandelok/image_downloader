@@ -2,15 +2,16 @@
 # frozen_string_literal: true
 
 require_relative '../lib/internet_connection_validator'
+require_relative '../lib/folder_validator'
 require_relative '../lib/reader'
 require_relative '../lib/url_validator'
 require_relative '../lib/image_downloader'
 require_relative '../lib/performance'
 
-unless ARGV.any?
-  warn 'Please, write file name'
+if ARGV.size != 2
+  warn 'Please, write file name and path for downloads'
   exit
 end
 
 InternetConnectionValidator.call
-Performance.call(ARGV.first, Reader, UrlValidator, ImageDownloader)
+Performance.call(ARGV.first, ARGV[1], FolderValidator, Reader, UrlValidator, ImageDownloader)
