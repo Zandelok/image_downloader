@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'application'
-require 'benchmark'
 
 class ImageDownloader < Application
   attr_reader :image_urls, :path_for_downloads
