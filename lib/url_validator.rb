@@ -22,7 +22,7 @@ class UrlValidator < Application
     request.redirection_limit = 1
 
     valid_urls = file_name.split.select { |link| valid_url?(link) }.uniq
-    image_urls = valid_urls.select { |link| remote_file_exists?(link, request) && valid_size?(link, request) }
+    image_urls = valid_urls.select { |link| image_urls?(link, request) }
     if image_urls.empty?
       warn 'No reliable files were found'
       exit
@@ -36,11 +36,8 @@ class UrlValidator < Application
     url =~ url_regexp ? true : false
   end
 
-  def remote_file_exists?(url, request)
-    request.get(url).response['content-type'].start_with?('image')
-  end
-
-  def valid_size?(url, request)
-    request.get(url).response['content-length'].to_i < MAX_SIZE
+  def image_urls?(url, request)
+    response = request.get(url).response
+    response['content-type'].start_with?('image') && response['content-length'].to_i < MAX_SIZE
   end
 end
