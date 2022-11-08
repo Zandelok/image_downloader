@@ -7,7 +7,7 @@
 
 - rvm or rbenv
 - ruby 3.1.0
-- bundler version 2.2.32
+- bundler version 2.3.3
 
 ### Pre-run steps:
 #### Pull the project
