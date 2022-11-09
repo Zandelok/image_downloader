@@ -17,14 +17,11 @@ class ImageDownloader < Application
   private
 
   def download_images
-    queue = Queue.new
-    threads = image_urls.map do |image|
+    Parallel.map(image_urls, in_threads: 10) do |image|
       file_name = image.split('/').last
       image_name = filename(file_name)
-      Thread.new { queue << http_download(image, image_name) }
+      http_download(image, image_name)
     end
-
-    threads.each(&:join)
     p 'All allowed files were successfully downloaded'
   end
 

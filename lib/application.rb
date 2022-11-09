@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mechanize'
+require 'parallel'
 
 class Application
   def self.call(*args)

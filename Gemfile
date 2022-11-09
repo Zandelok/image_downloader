@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'mechanize'
 gem 'open3'
+gem 'parallel'
 gem 'pry-byebug'
 gem 'rspec'
 gem 'rubocop'

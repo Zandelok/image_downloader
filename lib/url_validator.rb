@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'application'
+require 'parallel'
 
 class UrlValidator < Application
   attr_reader :income_urls
@@ -20,9 +21,12 @@ class UrlValidator < Application
   def validate_urls
     request = Mechanize.new
     request.redirection_limit = 1
+    image_urls = []
 
     valid_urls = income_urls.split.select { |link| valid_url?(link) }.uniq
-    image_urls = valid_urls.select { |link| image_urls?(link, request) }
+    Parallel.each(valid_urls, in_threads: 10) do |link|
+      image_urls << link if image_urls?(link, request)
+    end
     exit_with_warning('No reliable files were found') if image_urls.empty?
 
     image_urls

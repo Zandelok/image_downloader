@@ -95,6 +95,7 @@ PLATFORMS
 DEPENDENCIES
   mechanize
   open3
+  parallel
   pry-byebug
   rspec
   rubocop
